@@ -1,0 +1,48 @@
+name: 'Pull request'
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  apply-development:
+    runs-on: ubuntu-latest
+    env: 
+      TF_WORKSPACE: development
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.3.3
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Init
+        run: terraform init
+      
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+
+  apply-staging:
+    needs: apply-development
+    runs-on: ubuntu-latest
+    env: 
+      TF_WORKSPACE: staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.3.3
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Init
+        run: terraform init
+      
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
