@@ -7,7 +7,7 @@ resource "aws_vpc" "main" {
   instance_tenancy = "default"
 
   tags = {
-    Name = "${terraform.workspace} VPC"
+    Name = "${local.env} VPC"
   }
 }
 
@@ -15,7 +15,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "${terraform.workspace} - Internet Gateway"
+    Name = "${local.env} - Internet Gateway"
   }
 }
 
@@ -27,7 +27,7 @@ resource "aws_subnet" "public" {
   availability_zone = each.value
 
   tags = {
-    Name = "${terraform.workspace} - Public subnet"
+    Name = "${local.env} - Public subnet"
   }
 }
 
@@ -40,7 +40,7 @@ resource "aws_route_table" "main" {
   }
 
   tags = {
-    Name = "${terraform.workspace} - Public route table"
+    Name = "${local.env} - Public route table"
   }
 }
 

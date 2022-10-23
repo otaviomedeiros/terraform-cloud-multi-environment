@@ -1,5 +1,5 @@
 resource "aws_security_group" "alb_public" {
-  name        = "public-alb-${terraform.workspace}"
+  name        = "public-alb-${local.env}"
   description = "Allow public inbound traffic"
   vpc_id      = aws_vpc.main.id
 
@@ -25,24 +25,24 @@ resource "aws_security_group" "alb_public" {
   }
 
   tags = {
-    Name = "${terraform.workspace} - Public traffic SG"
+    Name = "${local.env} - Public traffic SG"
   }
 }
 
 resource "aws_lb" "public" {
-  name               = "public-alb-${terraform.workspace}"
+  name               = "public-alb-${local.env}"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_public.id]
   subnets            = [for subnet in aws_subnet.public : subnet.id]
 
   tags = {
-    Environment = "${terraform.workspace}"
+    Environment = "${local.env}"
   }
 }
 
 resource "aws_lb_target_group" "public_alb" {
-  name        = "target-group-${terraform.workspace}"
+  name        = "target-group-${local.env}"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
