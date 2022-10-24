@@ -78,7 +78,7 @@ resource "aws_ecs_task_definition" "app_task_definition" {
         logDriver = "awslogs"
         options = {
           "awslogs-region"        = var.region,
-          "awslogs-group"         = "/ecs/${local.service_name}",
+          "awslogs-group"         = "/ecs/${local.service_name}-${local.env}",
           "awslogs-stream-prefix" = "ecs"
         }
       }
@@ -87,7 +87,7 @@ resource "aws_ecs_task_definition" "app_task_definition" {
 }
 
 resource "aws_cloudwatch_log_group" "service" {
-  name              = "/ecs/${local.service_name}"
+  name              = "/ecs/${local.service_name}-${local.env}"
   retention_in_days = 30
 }
 
