@@ -5,11 +5,15 @@ on:
     branches:
       - main
 
+defaults:
+  run:
+    working-directory: ./environments
+
 jobs:
   apply-development:
     runs-on: ubuntu-latest
     env: 
-      TF_WORKSPACE: development
+      TF_WORKSPACE: dev
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -30,7 +34,7 @@ jobs:
     needs: apply-development
     runs-on: ubuntu-latest
     env: 
-      TF_WORKSPACE: staging
+      TF_WORKSPACE: stg
     steps:
       - name: Checkout
         uses: actions/checkout@v3

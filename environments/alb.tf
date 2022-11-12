@@ -59,3 +59,21 @@ resource "aws_lb_listener" "public_alb_80" {
     target_group_arn = aws_lb_target_group.public_alb.arn
   }
 }
+
+data "aws_acm_certificate" "cert" {
+  domain   = "*.${var.domain_dns_name}"
+  statuses = ["ISSUED"]
+}
+
+resource "aws_lb_listener" "public_alb_https" {
+  load_balancer_arn = aws_lb.public.arn
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = data.aws_acm_certificate.cert.arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.public_alb.arn
+  }
+}
