@@ -3,12 +3,16 @@ name: 'Pull request'
 on:
   pull_request:
 
+defaults:
+  run:
+    working-directory: ./environments
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        workspace: [development, staging]
+        workspace: [dev, stg]
     env: 
       TF_WORKSPACE: ${{ matrix.workspace }}
     steps:

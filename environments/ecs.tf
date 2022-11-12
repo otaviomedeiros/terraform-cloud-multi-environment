@@ -2,10 +2,10 @@ locals {
   service_name = "app"
 }
 
-resource "aws_ecr_repository" "repository" {
-  name                 = "frontend-${local.env}"
-  image_tag_mutability = "MUTABLE"
-}
+# resource "aws_ecr_repository" "repository" {
+#   name                 = "frontend-${local.env}"
+#   image_tag_mutability = "MUTABLE"
+# }
 
 resource "aws_ecs_cluster" "app" {
   name = "app-ecs-cluster-${local.env}"
@@ -66,8 +66,8 @@ resource "aws_ecs_task_definition" "app_task_definition" {
       name      = "app-task-definition"
       image     = "nginx:latest"
       essential = true
-      cpu       = 128
-      memory    = 256
+      cpu       = 256
+      memory    = 512
       portMappings = [
         {
           containerPort = 80
