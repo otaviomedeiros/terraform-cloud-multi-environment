@@ -66,8 +66,8 @@ resource "aws_ecs_task_definition" "app_task_definition" {
       name      = "app-task-definition"
       image     = "nginx:latest"
       essential = true
-      cpu       = 256
-      memory    = 512
+      cpu       = 128
+      memory    = 256
       portMappings = [
         {
           containerPort = 80
