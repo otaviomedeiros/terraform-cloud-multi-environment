@@ -1,5 +1,5 @@
-resource "aws_security_group" "alb_public" {
-  name        = "public-alb-${local.env}"
+resource "aws_security_group" "api_public_alb" {
+  name        = "${local.env}--api--public-alb"
   description = "Allow public inbound traffic"
   vpc_id      = aws_vpc.main.id
 
@@ -29,34 +29,15 @@ resource "aws_security_group" "alb_public" {
   }
 }
 
-resource "aws_lb" "public" {
-  name               = "public-alb-${local.env}"
+resource "aws_lb" "api_public" {
+  name               = "${local.env}--api--public-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.alb_public.id]
+  security_groups    = [aws_security_group.api_public_alb.id]
   subnets            = [for subnet in aws_subnet.public : subnet.id]
 
   tags = {
     Environment = "${local.env}"
-  }
-}
-
-resource "aws_lb_target_group" "public_alb" {
-  name        = "target-group-${local.env}"
-  port        = 80
-  protocol    = "HTTP"
-  vpc_id      = aws_vpc.main.id
-  target_type = "ip"
-}
-
-resource "aws_lb_listener" "public_alb_80" {
-  load_balancer_arn = aws_lb.public.arn
-  port              = "80"
-  protocol          = "HTTP"
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.public_alb.arn
   }
 }
 
@@ -65,15 +46,19 @@ data "aws_acm_certificate" "cert" {
   statuses = ["ISSUED"]
 }
 
-resource "aws_lb_listener" "public_alb_https" {
-  load_balancer_arn = aws_lb.public.arn
+resource "aws_lb_listener" "api_public_alb_https" {
+  load_balancer_arn = aws_lb.api_public.arn
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
   certificate_arn   = data.aws_acm_certificate.cert.arn
 
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.public_alb.arn
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      status_code  = "404"
+    }
   }
 }
