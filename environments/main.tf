@@ -28,5 +28,6 @@ provider "cloudflare" {
 }
 
 locals {
-  env = terraform.workspace
+  env                    = terraform.workspace
+  ephemeral_environments = jsondecode(file("./ephemeral-envs/${local.env}.json"))
 }
