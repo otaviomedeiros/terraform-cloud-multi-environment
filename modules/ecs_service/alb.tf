@@ -1,5 +1,5 @@
 resource "aws_lb_target_group" "service" {
-  name                 = substr("${local.service_identifier}--target-group", 0, 32)
+  name                 = substr(local.service_identifier, 0, 32)
   port                 = 80
   protocol             = "HTTP"
   vpc_id               = var.alb.instance.vpc_id

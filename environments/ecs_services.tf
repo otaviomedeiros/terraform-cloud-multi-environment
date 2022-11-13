@@ -1,5 +1,5 @@
 module "backend_ecs_service" {
-  source = "./modules/ecs_service"
+  source = "../modules/ecs_service"
 
   region               = var.region
   env                  = local.env
