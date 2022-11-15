@@ -10,7 +10,7 @@ variable "env_name" {
 
 variable "service_name" {
   description = "The name of the service. The ECS service name will have the env variable value as a sufix"
-  type           = string
+  type        = string
 }
 
 variable "ecs_cluster_id" {
@@ -32,7 +32,11 @@ variable "host_name" {
   type        = string
 }
 
-variable "service_docker_image" {
-  description = "The ECS service docker image name"
-  type        = string
+variable "docker" {
+  description = "Docker image and port for ECS service"
+
+  type = object({
+    image = string,
+    port  = number
+  })
 }
