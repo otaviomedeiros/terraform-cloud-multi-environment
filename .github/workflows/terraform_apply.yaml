@@ -5,13 +5,36 @@ on:
     branches:
       - main
 
-defaults:
-  run:
-    working-directory: ./environments
-
 jobs:
-  apply-development:
+  apply-global:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./global
+    env: 
+      TF_WORKSPACE: dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.3.3
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Init
+        run: terraform init
+      
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+
+  apply-development:
+    needs: apply-global
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./environments
     env: 
       TF_WORKSPACE: dev
     steps:
@@ -33,6 +56,9 @@ jobs:
   apply-staging:
     needs: apply-development
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./environments
     env: 
       TF_WORKSPACE: stg
     steps:
