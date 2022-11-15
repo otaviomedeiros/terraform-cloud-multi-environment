@@ -2,7 +2,7 @@ module "backend_ecs_service" {
   source = "../ecs_service"
 
   region               = var.region
-  env                  = local.ephemeral_env_identifier
+  env_name             = local.ephemeral_env_identifier
   service_name         = "backend"
   service_docker_image = "httpd:latest"
   alb                  = var.alb

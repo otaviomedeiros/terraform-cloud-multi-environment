@@ -3,6 +3,11 @@ variable "region" {
   type        = string
 }
 
+variable "env_name" {
+  description = "The name of the environment which will be appended to resource names"
+  type        = string
+}
+
 variable "cloudflare_api_token" {
   description = "Cloud Flare API token used to create DNS records"
   type = string
