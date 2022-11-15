@@ -8,5 +8,5 @@ terraform {
 }
 
 locals {
-  env = "${var.env}-${var.ephemeral_env}"
+  ephemeral_env_identifier = "${var.env_name}-${var.ephemeral_env_name}"
 }

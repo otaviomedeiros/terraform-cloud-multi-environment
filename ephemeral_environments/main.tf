@@ -29,20 +29,20 @@ provider "cloudflare" {
 }
 
 locals {
-  elastic_env_name = "app-dev" # this may be passed as argument
+  env_name   = var.env_name
   ephemeral_env_name = terraform.workspace
 }
 
 data "cloudflare_zone" "site" {
-  name = var.domain_dns_name
+  name = var.dns_zone_name
 }
 
 data "aws_ecs_cluster" "services" {
-  cluster_name = "${local.elastic_env_name}--cluster"
+  cluster_name = local.env_name
 }
 
 data "aws_lb" "public_api" {
-  name = "${local.elastic_env_name}--api--public-alb"
+  name = "public-api-alb-${local.env_name}"
 }
 
 data "aws_lb_listener" "secure" {
@@ -51,12 +51,12 @@ data "aws_lb_listener" "secure" {
 }
 
 module "ephemeral_env" {
-  source = "../../modules/ephemeral_env"
+  source = "../modules/ephemeral_env"
 
-  region         = var.region
-  env            = local.elastic_env_name
-  ephemeral_env  = local.ephemeral_env_name
-  ecs_cluster_id = data.aws_ecs_cluster.services.id
+  region             = var.region
+  env_name           = local.env_name
+  ephemeral_env_name = local.ephemeral_env_name
+  ecs_cluster_id     = data.aws_ecs_cluster.services.id
 
   alb = {
     instance     = data.aws_lb.public_api,

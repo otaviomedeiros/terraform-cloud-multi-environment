@@ -7,7 +7,7 @@ resource "aws_vpc" "main" {
   instance_tenancy = "default"
 
   tags = {
-    Name = "${local.env} VPC"
+    Name = "${local.env_name} VPC"
   }
 }
 
@@ -15,7 +15,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "${local.env} - Internet Gateway"
+    Name = "${local.env_name} - Internet Gateway"
   }
 }
 
@@ -27,7 +27,7 @@ resource "aws_subnet" "public" {
   availability_zone = each.value
 
   tags = {
-    Name = "${local.env} - Public subnet"
+    Name = "${local.env_name} - Public subnet"
   }
 }
 
@@ -40,7 +40,7 @@ resource "aws_route_table" "main" {
   }
 
   tags = {
-    Name = "${local.env} - Public route table"
+    Name = "${local.env_name} - Public route table"
   }
 }
 
