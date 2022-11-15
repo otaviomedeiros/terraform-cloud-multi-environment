@@ -29,7 +29,7 @@ provider "cloudflare" {
 }
 
 locals {
-  env_name   = var.env_name
+  env_name           = var.env_name
   ephemeral_env_name = terraform.workspace
 }
 

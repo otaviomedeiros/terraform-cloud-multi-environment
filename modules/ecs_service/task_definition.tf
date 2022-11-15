@@ -17,14 +17,14 @@ resource "aws_ecs_task_definition" "service" {
   container_definitions = jsonencode([
     {
       name      = var.service_name
-      image     = var.service_docker_image
+      image     = var.docker.image
       essential = true
       cpu       = 256
       memory    = 512
       portMappings = [
         {
-          containerPort = 80
-          hostPort      = 80
+          containerPort = var.docker.port
+          hostPort      = var.docker.port
         }
       ]
       logConfiguration = {

@@ -10,7 +10,7 @@ variable "env_name" {
 
 variable "cloudflare_api_token" {
   description = "Cloud Flare API token used to create DNS records"
-  type = string
+  type        = string
 }
 
 variable "dns_zone_name" {
