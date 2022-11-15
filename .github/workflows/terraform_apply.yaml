@@ -11,8 +11,6 @@ jobs:
     defaults:
       run:
         working-directory: ./global
-    env: 
-      TF_WORKSPACE: dev
     steps:
       - name: Checkout
         uses: actions/checkout@v3
