@@ -29,5 +29,5 @@ provider "cloudflare" {
 }
 
 locals {
-  env = terraform.workspace
+  env_name = terraform.workspace
 }

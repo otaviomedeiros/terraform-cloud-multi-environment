@@ -1,9 +1,9 @@
 locals {
-  public_api_domain_name = local.env
+  public_api_domain_name = local.env_name
 }
 
 data "cloudflare_zone" "site" {
-  name = var.domain_dns_name
+  name = var.dns_zone_name
 }
 
 resource "cloudflare_record" "public_api" {

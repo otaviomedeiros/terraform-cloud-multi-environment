@@ -1,5 +1,9 @@
+locals {
+  public_api_name = "public-api-alb-${local.env_name}"
+}
+
 resource "aws_security_group" "api_public_alb" {
-  name        = "${local.env}--api--public-alb"
+  name        = local.public_api_name
   description = "Allow public inbound traffic"
   vpc_id      = aws_vpc.main.id
 
@@ -25,24 +29,24 @@ resource "aws_security_group" "api_public_alb" {
   }
 
   tags = {
-    Name = "${local.env} - Public traffic SG"
+    Name = "${local.env_name} - Public traffic SG"
   }
 }
 
 resource "aws_lb" "api_public" {
-  name               = "${local.env}--api--public-alb"
+  name               = local.public_api_name
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.api_public_alb.id]
   subnets            = [for subnet in aws_subnet.public : subnet.id]
 
   tags = {
-    Environment = "${local.env}"
+    Environment = "${local.env_name}"
   }
 }
 
 data "aws_acm_certificate" "cert" {
-  domain   = "*.${var.domain_dns_name}"
+  domain   = "*.${var.dns_zone_name}"
   statuses = ["ISSUED"]
 }
 

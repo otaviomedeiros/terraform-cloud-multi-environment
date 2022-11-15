@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "app" {
-  name = "${local.env}--cluster"
+  name = local.env_name
 
   setting {
     name  = "containerInsights"
